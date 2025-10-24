@@ -1,0 +1,55 @@
+{
+  "name": "n8n-nodes-surusai",
+  "version": "0.1.0",
+  "description": "n8n community node for SURUS AI (translate, transcribe, extract)",
+  "keywords": [
+    "n8n-community-node",
+    "n8n-nodes",
+    "surus",
+    "ai",
+    "translate",
+    "transcribe",
+    "extract"
+  ],
+  "author": {
+    "name": "Mauro Ibañez",
+    "email": "mauro@surus.lat",
+    "url": "https://surus.lat/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mauroibz/n8n-nodes-surusai.git"
+  },
+  "homepage": "https://github.com/mauroibz/n8n-nodes-surusai",
+  "bugs": {
+    "url": "https://github.com/mauroibz/n8n-nodes-surusai/issues"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "pnpm run clean && tsc -p tsconfig.build.cjs.json && node scripts/copy-static-assets.mjs"
+  },
+  "dependencies": {
+    "n8n-workflow": "^1.114.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.50",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "n8n": {
+    "credentials": [
+      "dist/credentials/SurusAiApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/SurusAi/SurusAi.node.js"
+    ]
+  }
+}
