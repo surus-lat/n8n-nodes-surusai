@@ -1,6 +1,6 @@
 # n8n-nodes-surusai
 
-This is an n8n community node for SURUS AI. It lets you:
+This is an n8n community node for [SURUS AI](/surus.lat/). It lets you access [SURUS AI nodes](https://surus.lat/ainodes) to:
 
 - Translate text
 - Transcribe audio files
@@ -30,11 +30,11 @@ Compatible with n8n@1.60.0 or later.
 
 ## Resources
 
-- SURUS API: https://api.surus.dev
+- SURUS API: https://surus.lat/
 - n8n community nodes docs: https://docs.n8n.io/integrations/#community-nodes
 
 ## More from SURUS
 
 - SURUS provides several AI capabilities as native n8n nodes.
-- If you don’t find the exact task you need, we maintain a catalog of OpenAI-compatible models suitable for agent and extraction use cases.
+- If you don’t find the exact task you need, we maintain a catalog of OpenAI-compatible models suitable for a wide variety of applications. Just use the agent or extraction nodes with an openAI model node, pointing to our models. You can read more on our website [surus.lat](https://surus.lat).
 - Need something specific? Contact us and we can deploy a custom node tailored to your task.
