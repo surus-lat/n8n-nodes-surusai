@@ -1,4 +1,4 @@
-import type { IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription, IDataObject, IHttpRequestOptions } from 'n8n-workflow';
+import type { IExecuteFunctions, INodeExecutionData, INodeType, INodeTypeDescription, IDataObject } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 
 export class SurusAi implements INodeType {
@@ -172,14 +172,15 @@ export class SurusAi implements INodeType {
             source_lang: sourceLang,
           };
 
-          const options = {
+          // Use the correct n8n approach for multipart requests
+          const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'surusAiApi', {
             method: 'POST',
             url: 'https://api.surus.dev/functions/v1/transcribe',
-            formData,
-            // Remove json: true for multipart requests
-          } as unknown as IHttpRequestOptions;
-
-          const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'surusAiApi', options);
+            body: formData,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
 
           let finalData: unknown = responseData;
           if (onlyResult) {
