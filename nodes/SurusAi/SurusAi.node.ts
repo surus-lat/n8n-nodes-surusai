@@ -175,9 +175,8 @@ export class SurusAi implements INodeType {
           const options = {
             method: 'POST',
             url: 'https://api.surus.dev/functions/v1/transcribe',
-            // httpRequestWithAuthentication supports multipart via "formData" in runtime
             formData,
-            json: true,
+            // Remove json: true for multipart requests
           } as unknown as IHttpRequestOptions;
 
           const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'surusAiApi', options);
