@@ -165,10 +165,7 @@ export class SurusAi implements INodeType {
           }
 
           const formData: Record<string, unknown> = {
-            file: {
-              value: binaryData,
-              options: { filename: 'audio.wav', contentType: 'audio/wav' },
-            },
+            file: binaryData,
             source_lang: sourceLang,
           };
 
@@ -177,9 +174,6 @@ export class SurusAi implements INodeType {
             method: 'POST',
             url: 'https://api.surus.dev/functions/v1/transcribe',
             body: formData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
           });
 
           let finalData: unknown = responseData;
