@@ -1,0 +1,61 @@
+{
+  "name": "n8n-nodes-surusai",
+  "version": "0.2.0",
+  "description": "n8n community node for SURUS AI (translate, transcribe, extract)",
+  "license": "MIT",
+  "homepage": "https://github.com/surus-lat/n8n-nodes-surusai",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n-community-node",
+    "n8n-nodes",
+    "surus",
+    "ai",
+    "translate",
+    "transcribe",
+    "extract"
+  ],
+  "author": {
+    "name": "Mauro Ibañez",
+    "email": "mauro@surus.lat",
+    "url": "https://surus.lat/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surus-lat/n8n-nodes-surusai"
+  },
+  "bugs": {
+    "url": "https://github.com/surus-lat/n8n-nodes-surusai/issues"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "release": "n8n-node release",
+    "prepublishOnly": "n8n-node prerelease"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/SurusAiApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/SurusAi/SurusAi.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "eslint": "9.32.0",
+    "prettier": "3.6.2",
+    "release-it": "^19.0.4",
+    "typescript": "5.9.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
