@@ -176,13 +176,14 @@ export class SurusAi implements INodeType {
             source_lang: sourceLang,
           };
 
-          const responseData = await this.helpers.request.call(this, {
+          const credentials = await this.getCredentials('surusAiApi');
+          const responseData = await this.helpers.httpRequest.call(this, {
             method: 'POST',
             url: 'https://api.surus.dev/functions/v1/transcribe',
             headers: {
-              'Authorization': `Bearer ${(await this.getCredentials('surusAiApi'))?.apiKey}`,
+              'Authorization': `Bearer ${credentials?.apiKey}`,
             },
-            formData: formData,
+            body: formData,
           });
 
           let finalData: unknown = responseData;
