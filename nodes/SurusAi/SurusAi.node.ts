@@ -9,7 +9,7 @@ export class SurusAi implements INodeType {
     group: ['transform'],
     version: 1,
     subtitle: '={{$parameter["operation"]}}',
-    description: 'Translate text, transcribe audio, and extract structured data using SURUS AI services',
+    description: 'Access to optimized SURUS AI nodes for specific tasks',
     defaults: {
       name: 'SURUS AI',
     },
