@@ -177,31 +177,73 @@ export class SurusAi implements INodeType {
           };
 
           const credentials = await this.getCredentials('surusAiApi');
-          const responseData = await this.helpers.httpRequest.call(this, {
-            method: 'POST',
+          
+          // Debug logging using n8n's logging system
+          this.logger?.info('=== SURUS AI TRANSCRIBE DEBUG ===');
+          this.logger?.info(`Audio file parameter: ${audioFile}`);
+          this.logger?.info(`Source language: ${sourceLang}`);
+          this.logger?.info(`Binary data size: ${binaryData?.length || 'undefined'}`);
+          this.logger?.info(`Binary data type: ${typeof binaryData}`);
+          this.logger?.info(`Form data file size: ${binaryData?.length || 0} bytes`);
+          this.logger?.info(`Form data filename: ${formData.file.options.filename}`);
+          this.logger?.info(`Form data content type: ${formData.file.options.contentType}`);
+          this.logger?.info(`Form data source_lang: ${formData.source_lang}`);
+          this.logger?.info(`API Key present: ${!!credentials?.apiKey}`);
+          this.logger?.info(`API Key length: ${typeof credentials?.apiKey === 'string' ? credentials.apiKey.length : 0}`);
+          this.logger?.info('Request URL: https://api.surus.dev/functions/v1/transcribe');
+          this.logger?.info('================================');
+
+          const requestOptions = {
+            method: 'POST' as const,
             url: 'https://api.surus.dev/functions/v1/transcribe',
             headers: {
               'Authorization': `Bearer ${credentials?.apiKey}`,
             },
             body: formData,
             json: false,
-          });
+          };
 
-          let finalData: unknown = responseData;
-          if (onlyResult) {
-            const extractedContent = getExtractedContent(responseData);
+          this.logger?.info(`Request method: ${requestOptions.method}`);
+          this.logger?.info(`Request URL: ${requestOptions.url}`);
+          this.logger?.info(`Request headers: Authorization Bearer ${typeof credentials?.apiKey === 'string' ? credentials.apiKey.substring(0, 10) + '...' : '[no key]'}`);
+          this.logger?.info('Request body: [FormData object]');
+          this.logger?.info(`Request json: ${requestOptions.json}`);
 
-            if (extractedContent) {
-              try {
-                const parsedContent = JSON.parse(extractedContent);
-                finalData = { surus_output: parsedContent };
-              } catch {
-                finalData = { surus_output: extractedContent };
+          try {
+            const responseData = await this.helpers.httpRequest.call(this, requestOptions);
+            this.logger?.info('=== SURUS AI RESPONSE SUCCESS ===');
+            this.logger?.info(`Response data: ${JSON.stringify(responseData)}`);
+            this.logger?.info('==================================');
+
+            let finalData: unknown = responseData;
+            if (onlyResult) {
+              const extractedContent = getExtractedContent(responseData);
+
+              if (extractedContent) {
+                try {
+                  const parsedContent = JSON.parse(extractedContent);
+                  finalData = { surus_output: parsedContent };
+                } catch {
+                  finalData = { surus_output: extractedContent };
+                }
               }
             }
-          }
 
-          returnData.push({ json: finalData as unknown as IDataObject, pairedItem: { item: i } });
+            returnData.push({ json: finalData as unknown as IDataObject, pairedItem: { item: i } });
+          } catch (httpError: unknown) {
+            const error = httpError as Error & { response?: { status?: number; statusText?: string; headers?: unknown; data?: unknown } };
+            this.logger?.error('=== SURUS AI HTTP ERROR ===');
+            this.logger?.error(`Error message: ${error.message}`);
+            this.logger?.error(`Error status: ${error.response?.status}`);
+            this.logger?.error(`Error status text: ${error.response?.statusText}`);
+            this.logger?.error(`Error headers: ${JSON.stringify(error.response?.headers)}`);
+            this.logger?.error(`Error data: ${JSON.stringify(error.response?.data)}`);
+            this.logger?.error(`Full error: ${JSON.stringify(httpError)}`);
+            this.logger?.error('==========================');
+            
+            // Re-throw the error so it gets handled by the outer catch block
+            throw httpError;
+          }
         } else if (operation === 'extract') {
           const extractText = this.getNodeParameter('extractText', i) as string;
           const jsonSchemaRaw = this.getNodeParameter('jsonSchema', i) as unknown;
