@@ -188,17 +188,19 @@ export class SurusAi implements INodeType {
             formData: formData,
           });
 
-          let finalData: unknown = responseData;
-          if (onlyResult) {
-            const extractedContent = getExtractedContent(responseData);
+          // Parse the JSON string response from SURUS API
+          let parsedResponse: unknown;
+          try {
+            parsedResponse = typeof responseData === 'string' ? JSON.parse(responseData) : responseData;
+          } catch {
+            parsedResponse = responseData;
+          }
 
-            if (extractedContent) {
-              try {
-                const parsedContent = JSON.parse(extractedContent);
-                finalData = { surus_output: parsedContent };
-              } catch {
-                finalData = { surus_output: extractedContent };
-              }
+          let finalData: unknown = parsedResponse;
+          if (onlyResult) {
+            // For transcribe, extract just the text field
+            if (typeof parsedResponse === 'object' && parsedResponse !== null && 'text' in parsedResponse) {
+              finalData = { text: (parsedResponse as { text: string }).text };
             }
           }
 
