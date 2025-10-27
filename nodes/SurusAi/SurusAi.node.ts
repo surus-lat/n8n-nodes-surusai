@@ -164,7 +164,7 @@ export class SurusAi implements INodeType {
             throw new NodeOperationError(this.getNode(), 'No binary data found for the audio file', { itemIndex: i });
           }
 
-          // Use the correct n8n approach for multipart requests
+          // Create multipart form data for SURUS API
           const formData = {
             file: {
               value: binaryData,
@@ -184,6 +184,7 @@ export class SurusAi implements INodeType {
               'Authorization': `Bearer ${credentials?.apiKey}`,
             },
             body: formData,
+            json: false,
           });
 
           let finalData: unknown = responseData;
