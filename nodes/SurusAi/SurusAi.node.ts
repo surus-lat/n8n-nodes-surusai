@@ -200,7 +200,7 @@ export class SurusAi implements INodeType {
           if (onlyResult) {
             // For transcribe, extract just the text field
             if (typeof parsedResponse === 'object' && parsedResponse !== null && 'text' in parsedResponse) {
-              finalData = { text: (parsedResponse as { text: string }).text };
+              finalData = { surus_output: (parsedResponse as { text: string }).text };
             }
           }
 
