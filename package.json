@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-surusai",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "n8n community node for SURUS AI (translate, transcribe, extract)",
   "license": "MIT",
   "homepage": "https://github.com/surus-lat/n8n-nodes-surusai",
