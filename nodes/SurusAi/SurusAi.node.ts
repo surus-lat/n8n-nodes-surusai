@@ -164,18 +164,25 @@ export class SurusAi implements INodeType {
             throw new NodeOperationError(this.getNode(), 'No binary data found for the audio file', { itemIndex: i });
           }
 
-          const form: Record<string, unknown> = {};
-          form.file = {
-            value: binaryData,
-            options: { filename: `audio.wav` },
-          };
-          form.source_lang = sourceLang;
-
           // Use the correct n8n approach for multipart requests
-          const responseData = await this.helpers.httpRequestWithAuthentication.call(this, 'surusAiApi', {
+          const formData = {
+            file: {
+              value: binaryData,
+              options: {
+                filename: 'audio.wav',
+                contentType: 'audio/wav',
+              },
+            },
+            source_lang: sourceLang,
+          };
+
+          const responseData = await this.helpers.request.call(this, {
             method: 'POST',
             url: 'https://api.surus.dev/functions/v1/transcribe',
-            body: form,
+            headers: {
+              'Authorization': `Bearer ${(await this.getCredentials('surusAiApi'))?.apiKey}`,
+            },
+            formData: formData,
           });
 
           let finalData: unknown = responseData;
